@@ -20,7 +20,7 @@ class Dispatcher extends ScalatraServlet {
     val json = parse(lines)
 //    json.extract[Data]
 //   println(json \ "data")
-   val b =  json \ "data" match {
+   val boroughs =  json \ "data" match {
         case JArray(x) => x map (y => y match {
 	 case JObject(z) => {
           val borough = Borough(z(0)._2.extract[Double], 
@@ -39,8 +39,9 @@ class Dispatcher extends ScalatraServlet {
          }
 	})
     }
-   println(b)
-   b 
+  
+   boroughs filter (b=> b.ons == ons_code) 
+    
   //  json \\ "ONS code"
 
   }
