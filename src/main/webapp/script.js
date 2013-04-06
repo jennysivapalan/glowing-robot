@@ -26,8 +26,8 @@ function CutsCheck() {
 	mapitReq.onload = function (e) {
 	    if (this.status == 200) {
 		var result = JSON.parse(this.response);
-		var wmc = result.shortcuts.WMC;
-		var gss = result.areas[wmc].codes.gss;
+		var council = result.shortcuts.council;
+		var gss = result.areas[council].codes.gss;
 		callback(gss);
 	    }
 	}
@@ -49,7 +49,7 @@ function CutsCheck() {
 
     function showResult(result) {
         var resultDisplay = document.createElement('p');
-        var html = 'The cuts will affect you by...' + result;
+        var html = 'There have been ' + result[0].cutPerHead + ' of cuts in your area';
         resultDisplay.innerHTML = html;
         document.querySelector('.result').appendChild(resultDisplay);
     }
