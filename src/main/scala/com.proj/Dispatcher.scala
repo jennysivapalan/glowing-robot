@@ -8,19 +8,13 @@ import org.json4s.DefaultFormats
 
 class Dispatcher extends ScalatraServlet {
 
-  get("/") {
-    "hello world"
-  }
-
-  get("/ons/:ons") {
-    val ons_code = params("ons")
+  get("/check") {
+    val ons = params.get("ons") getOrElse halt(400)
     val source = scala.io.Source.fromFile("/home/administrator/dev/glowing-robot/src/main/scala/com.proj/cuts2012v2.json")
     val lines = source mkString
     implicit val formats = DefaultFormats
     val json = parse(lines)
-//    json.extract[Data]
-//   println(json \ "data")
-   val boroughs =  json \ "data" match {
+    val boroughs =  json \ "data" match {
         case JArray(x) => x map (y => y match {
 	 case JObject(z) => {
           val borough = Borough(z(0)._2.extract[Double], 
@@ -31,19 +25,13 @@ class Dispatcher extends ScalatraServlet {
                   z(5)._2.extract[String], 
                   z(6)._2.extract[Double],
                   z(7)._2.extract[Double],
-                  z(8)._2.extract[Double]
-
-)
-           
+                  z(8)._2.extract[Double])
            borough
          }
 	})
     }
-  
-   boroughs filter (b=> b.ons == ons_code) 
-    
-  //  json \\ "ONS code"
-
+ 
+    boroughs filter (b=> b.ons == ons)
   }
 
   case class Data(data:List[Borough])
