@@ -1,0 +1,22 @@
+body {
+    margin: 0;
+    color: #222;
+    font: 60px georgia, serif;
+    text-align: center;
+}
+form {
+     background: yellow;
+}
+input, button {
+    border: none;
+    background: inherit;
+    color: inherit;
+    font: inherit;
+}
+input {
+    border-bottom: 4px dashed gray;
+    text-align: center;
+}
+button {
+    font-weight: bold;
+}
