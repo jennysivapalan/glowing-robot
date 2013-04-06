@@ -2,17 +2,18 @@ package com.proj
 
 import org.scalatra.ScalatraServlet
 import org.json4s._
-import org.json4s.native.JsonMethods._
 import org.json4s.DefaultFormats
+import org.scalatra.json.NativeJsonSupport
 
+class Dispatcher extends ScalatraServlet with NativeJsonSupport {
 
-class Dispatcher extends ScalatraServlet {
+implicit val jsonFormats = DefaultFormats
 
   get("/check") {
+    contentType = formats("json")
     val ons = params.get("ons") getOrElse halt(400)
-    val source = scala.io.Source.fromFile("/home/administrator/dev/glowing-robot/src/main/scala/com.proj/cuts2012v2.json")
+    val source = scala.io.Source.fromFile("/Users/maxharlow/Projects/glowing-robot/src/main/scala/com.proj/cuts2012v2.json")
     val lines = source mkString
-    implicit val formats = DefaultFormats
     val json = parse(lines)
     val boroughs =  json \ "data" match {
         case JArray(x) => x map (y => y match {
@@ -34,7 +35,7 @@ class Dispatcher extends ScalatraServlet {
     boroughs filter (b=> b.ons == ons)
   }
 
-  case class Data(data:List[Borough])
+}
   case class Borough(
                       childrenInPov: Double,
                       publicSector: Double,
@@ -47,4 +48,4 @@ class Dispatcher extends ScalatraServlet {
                       averageIndex: Double
                       )
 
-}
+
